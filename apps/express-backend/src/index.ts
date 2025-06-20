@@ -55,6 +55,6 @@ app.post('/signup', async (req, res) => {
 });
 app.use('/graphql', graphqlHTTP({
   schema,
-  graphiql: true, // enables GraphiQL UI
+  graphiql: true, 
 }));
 app.listen(port, () => console.log('> Server is up and running on port: ' + port));

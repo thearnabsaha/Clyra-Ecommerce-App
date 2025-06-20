@@ -189,6 +189,9 @@ importers:
       '@types/node':
         specifier: ^20
         version: 20.17.19
+      '@workspace/database':
+        specifier: workspace:*
+        version: link:../database
       typescript:
         specifier: ^5.8.3
         version: 5.8.3

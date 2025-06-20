@@ -19,6 +19,7 @@
     "graphql-tag": "^2.12.6"
   },
   "devDependencies": {
+    "@workspace/database": "workspace:*",
     "@types/node": "^20",
     "typescript": "^5.8.3"
   }
