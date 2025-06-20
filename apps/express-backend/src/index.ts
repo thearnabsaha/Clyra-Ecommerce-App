@@ -11,7 +11,7 @@ import { SignUpSchema } from '@workspace/utils/types';
 const morganFormat = ':method :url :status :response-time ms';
 app.use(morgan(morganFormat));
 app.use(helmet());
-
+import { prisma } from '@workspace/database/client'
 app.use(cors({
     origin: process.env.CORS_ORIGIN,
     credentials: true,
@@ -39,12 +39,21 @@ app.get('/health', async (req, res) => {
     };
     res.status(200).json(healthcheck);
 });
-app.post('/signup', (req, res) => {
+app.post('/signup', async (req, res) => {
     const result = SignUpSchema.safeParse(req.body);
     if (!result.success) {
         res.send(result.error.format());
     } else {
-        res.send(result);
+        const user = await prisma.user.create({
+            data: {
+                username: req.body.username,
+                //@ts-ignore
+                email: req.body.email,
+                age: req.body.age,
+                password: req.body.password,
+            }
+        });
+        res.send(user);
     }
 });
 app.listen(port, () => console.log('> Server is up and running on port: ' + port));
