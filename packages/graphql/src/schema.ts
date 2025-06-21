@@ -11,5 +11,6 @@ export const typeDefs = gql`
   type Query {
     hello: String
     users: [User!]!
+    user(name:String!): User
   }
 `;
