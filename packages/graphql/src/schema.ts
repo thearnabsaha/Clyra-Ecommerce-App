@@ -1,16 +1,7 @@
-import { gql } from 'graphql-tag';
+import { userTypeDefs } from './modules/user/user.schema';
+// import { productTypeDefs } from './modules/product/product.schema';
 
-export const typeDefs = gql`
-  type User {
-    id: ID!
-    username: String!
-    email: String!
-    age: Int
-  }
-
-  type Query {
-    hello: String
-    users: [User!]!
-    user(name:String!): User
-  }
-`;
+export const typeDefs = [
+  userTypeDefs,
+  // productTypeDefs
+];

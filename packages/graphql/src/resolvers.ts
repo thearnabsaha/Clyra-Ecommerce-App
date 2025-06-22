@@ -1,13 +1,13 @@
-import { prisma } from '@workspace/database/client'
+import { userResolvers } from './modules/user/user.resolvers';
+// import { productResolvers } from './modules/product/product.resolvers';
+
 export const resolvers = {
   Query: {
-    hello: () => 'Hello from GraphQL in TurboRepo!',
-    user: async (name:string) => {
-      const data=await prisma.user.findFirst({where:{username:name}});
-      return data;
-    },
-    users: async () => {
-      return await prisma.user.findMany();
-    },
+    ...userResolvers.Query,
+    // ...productResolvers.Query,
   },
+  Mutation: {
+    ...userResolvers.Mutation,
+    // ...productResolvers.Mutation,
+  }
 };
