@@ -7,12 +7,13 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model User {
-  id          Int      @id @default(autoincrement())
-  username    String   @unique
+model Vendor {
+  id          Int        @id @default(autoincrement())
+  email       String     @unique
+  name        String
   password    String
   products    Products[]
-  time        DateTime @default(now())
+  time        DateTime   @default(now())
 }
 
 model Products {
@@ -21,6 +22,6 @@ model Products {
   description String
   price       Int
   userId      Int
-  user        User     @relation(fields: [userId], references: [id])
+  user        Vendor     @relation(fields: [userId], references: [id])
   time        DateTime @default(now())
 }
