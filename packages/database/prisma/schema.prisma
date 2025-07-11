@@ -17,7 +17,7 @@ model Vendor {
 }
 
 model Products {
-  id          Int         @id @default(autoincrement())
+  id          String      @id @default(uuid()) @unique
   title       String
   description String
   image       String?

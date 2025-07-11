@@ -26,7 +26,11 @@ export const AddProduct = async (req: Request, res: Response) => {
 }
 export const GetAllProducts = async (req: Request, res: Response) => {
     try {
-        const findAllProduct = await prisma.products.findMany({})
+        const findAllProduct = await prisma.products.findMany({
+            where:{
+                userId:Number(req.id)
+            }
+        })
         if (!findAllProduct) {
             res.status(404).json({ "message": "Products Doesn't Exists!" })
             return;
@@ -37,19 +41,26 @@ export const GetAllProducts = async (req: Request, res: Response) => {
         console.log(error)
     }
 }
-// export const GetProduct = async (req: Request, res: Response) => {
-//     try {
-//         const findProductByID = await prisma.products.findFirst({})
-//         if (!findProductByID) {
-//             res.status(404).json({ "message": "Products Doesn't Exists!" })
-//             return;
-//         }
-//         res.status(200).json({ "message": findProductByID })
-//     } catch (error) {
-//         res.status(500).json({ "Error": error })
-//         console.log(error)
-//     }
-// }
+export const GetProduct = async (req: Request, res: Response) => {
+    try {
+        const findProductByID = await prisma.products.findFirst({
+            where:{
+                AND:[
+                    {id:req.params.id},
+                    {userId:Number(req.id)}
+                ]
+            }
+        })
+        if (!findProductByID) {
+            res.status(404).json({ "message": "This Product Doesn't Exists!" })
+            return;
+        }
+        res.status(200).json({ "message": findProductByID })
+    } catch (error) {
+        res.status(500).json({ "Error": error })
+        console.log(error)
+    }
+}
 export const UpdateProduct = async (req: Request, res: Response) => {
     try {
         const result = VendorSignInSchema.safeParse(req.body);

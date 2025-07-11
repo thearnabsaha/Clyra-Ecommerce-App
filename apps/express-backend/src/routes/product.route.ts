@@ -5,11 +5,11 @@ import { jwtAuth } from "../middlewares/jwtAuth";
 const router:Router = Router();
 
 router.post("/",jwtAuth, AddProduct);
-router.get("/", GetAllProducts);
-router.get("/:id", GetProduct);
-router.put("/:id", UpdateProduct);
-router.delete("/:id", DeleteProduct);
-router.delete("/", DeleteAllProduct);
+router.get("/",jwtAuth, GetAllProducts);
+router.get("/:id",jwtAuth, GetProduct);
+router.put("/:id",jwtAuth, UpdateProduct);
+router.delete("/:id",jwtAuth, DeleteProduct);
+router.delete("/",jwtAuth, DeleteAllProduct);
 
 export default router;
 
