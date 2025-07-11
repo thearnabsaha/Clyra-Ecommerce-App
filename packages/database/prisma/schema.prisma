@@ -17,11 +17,12 @@ model Vendor {
 }
 
 model Products {
-  id          Int      @id @default(autoincrement())
+  id          Int         @id @default(autoincrement())
   title       String
   description String
+  image       String?
   price       Int
   userId      Int
-  user        Vendor     @relation(fields: [userId], references: [id])
-  time        DateTime @default(now())
+  user        Vendor      @relation(fields: [userId], references: [id])
+  time        DateTime    @default(now())
 }

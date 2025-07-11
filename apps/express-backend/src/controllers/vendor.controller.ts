@@ -15,22 +15,22 @@ export const VendorSignup = async (req: Request, res: Response) => {
                     email: req.body.email,
                 }
             })
-            if(findUser){
-                res.status(409).json({"message":"User Already Exists!"})
+            if (findUser) {
+                res.status(409).json({ "message": `User with email ${findUser.email} Already Exists!` })
                 return;
             }
-            const hashedPassword=await bcrypt.hash(req.body.password,8)
-            await prisma.vendor.create({
+            const hashedPassword = await bcrypt.hash(req.body.password, 8)
+            const user = await prisma.vendor.create({
                 data: {
                     name: req.body.name,
                     email: req.body.email,
                     password: hashedPassword
                 },
             })
-            res.status(200).json({"message":"User Vendor Added!"})
+            res.status(200).json({ "message": `New Vendor Added with name ${user.name} and Email ${user.email}!` })
         }
     } catch (error) {
-        res.status(500).json({"Error":error})
+        res.status(500).json({ "Error": error })
         console.log(error)
     }
 }
@@ -45,20 +45,20 @@ export const VendorSignin = async (req: Request, res: Response) => {
                     email: req.body.email,
                 }
             })
-            if(!findUser){
-                res.status(404).json({"message":"User Doesn't Exists!"})
+            if (!findUser) {
+                res.status(404).json({ "message": "User Doesn't Exists!" })
                 return;
             }
-            const isAuthenticate=await bcrypt.compare(req.body.password,findUser.password)
-            if(!isAuthenticate){
-                res.status(401).json({"message":"Wrong Password!"})
+            const isAuthenticate = await bcrypt.compare(req.body.password, findUser.password)
+            if (!isAuthenticate) {
+                res.status(401).json({ "message": "Wrong Password!" })
                 return;
             }
-            var token = jwt.sign({ id:findUser.id }, JWT_SECRET,{expiresIn:"1h"});
-            res.status(200).json({"token":token})
+            var token = jwt.sign({ id: findUser.id }, JWT_SECRET, { expiresIn: "1h" });
+            res.status(200).json({ "token": token })
         }
     } catch (error) {
-        res.status(500).json({"Error":error})
+        res.status(500).json({ "Error": error })
         console.log(error)
     }
 }
