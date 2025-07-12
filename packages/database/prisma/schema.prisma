@@ -15,14 +15,20 @@ model Vendor {
   products    Products[]
   time        DateTime   @default(now())
 }
+model Category {
+  id        Int         @id @default(autoincrement())
+  name      String      @unique
+  products  Products[]  @relation("ProductCategories")
+}
 
 model Products {
-  id          String      @id @default(uuid()) @unique
+  id          String        @id @default(uuid()) @unique
   title       String
   description String
   image       String?
   price       Int
   userId      Int
-  user        Vendor      @relation(fields: [userId], references: [id])
-  time        DateTime    @default(now())
+  user        Vendor        @relation(fields: [userId], references: [id])
+  categories  Category[]    @relation("ProductCategories")
+  time        DateTime      @default(now())
 }

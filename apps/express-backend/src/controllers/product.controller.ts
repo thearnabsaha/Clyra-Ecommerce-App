@@ -1,6 +1,6 @@
 import { Request, Response } from 'express';
 import { prisma } from '@workspace/database/client';
-import { ProductSchema, VendorSignInSchema } from '@workspace/utils/types';
+import { CategorySchema, ProductSchema } from '@workspace/utils/types';
 
 export const AddProduct = async (req: Request, res: Response) => {
     try {
@@ -129,6 +129,35 @@ export const DeleteAllProduct = async (req: Request, res: Response) => {
             return;
         }
         res.status(200).json({ "message": "All Products are now deleted!" })
+    } catch (error) {
+        res.status(500).json({ "Error": error })
+        console.log(error)
+    }
+}
+export const AddCategory = async (req: Request, res: Response) => {
+    try {
+        const result = CategorySchema.safeParse(req.body);
+        if (!result.success) {
+            res.status(400).json(result.error.format());
+        } else {
+            //@ts-ignore
+            const FindCategory = await prisma.category.findFirst({
+                where: {
+                    name: req.body.name 
+                }
+            })
+            if (FindCategory) {
+                res.status(409).json({ "message": "This Category Already Exists!" })
+                return;
+            }
+            //@ts-ignore
+            const category = await prisma.category.create({
+                data: {
+                    name: req.body.name,
+                },
+            })
+            res.status(200).json({ "message": `New Category Added with name ${category.name} and ProductID ${category.id}!` })
+        }
     } catch (error) {
         res.status(500).json({ "Error": error })
         console.log(error)

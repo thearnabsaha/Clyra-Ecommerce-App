@@ -26,3 +26,6 @@ export const ProductSchema = z.object({
     image: z.string(),
     price: z.number().min(1, { message: 'title must be at least 5 characters long' }),
 });
+export const CategorySchema = z.object({
+    name: z.string().min(3, { message: 'title must be at least 3 characters long' }),
+});
