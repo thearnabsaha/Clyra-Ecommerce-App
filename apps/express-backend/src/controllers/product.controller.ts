@@ -14,6 +14,9 @@ export const AddProduct = async (req: Request, res: Response) => {
                     description: req.body.description,
                     price: req.body.price,
                     image: req.body.image,
+                    categories:{
+                        connect:req.body.categories
+                    },
                     userId: Number(req.id),
                 },
             })
@@ -140,7 +143,6 @@ export const AddCategory = async (req: Request, res: Response) => {
         if (!result.success) {
             res.status(400).json(result.error.format());
         } else {
-            //@ts-ignore
             const FindCategory = await prisma.category.findFirst({
                 where: {
                     name: req.body.name 
@@ -150,7 +152,6 @@ export const AddCategory = async (req: Request, res: Response) => {
                 res.status(409).json({ "message": "This Category Already Exists!" })
                 return;
             }
-            //@ts-ignore
             const category = await prisma.category.create({
                 data: {
                     name: req.body.name,
@@ -158,6 +159,19 @@ export const AddCategory = async (req: Request, res: Response) => {
             })
             res.status(200).json({ "message": `New Category Added with name ${category.name} and ProductID ${category.id}!` })
         }
+    } catch (error) {
+        res.status(500).json({ "Error": error })
+        console.log(error)
+    }
+}
+export const GetAllCategory = async (req: Request, res: Response) => {
+    try {
+        const findAllCategory = await prisma.category.findMany({})
+        if (!findAllCategory) {
+            res.status(404).json({ "message": "Category Doesn't Exists!" })
+            return;
+        }
+        res.status(200).json({ "message": findAllCategory })
     } catch (error) {
         res.status(500).json({ "Error": error })
         console.log(error)
