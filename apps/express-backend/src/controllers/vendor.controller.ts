@@ -62,3 +62,20 @@ export const VendorSignin = async (req: Request, res: Response) => {
         console.log(error)
     }
 }
+export const VendorProfile = async (req: Request, res: Response) => {
+    try {
+        const findUser = await prisma.vendor.findFirst({
+            where: {
+                id:Number(req.id)
+            }
+        })
+        if (!findUser) {
+            res.status(404).json({ "message": "User Doesn't Exists!" })
+            return;
+        }
+        res.status(200).json({ "Vendor": findUser })
+    } catch (error) {
+        res.status(500).json({ "Error": error })
+        console.log(error)
+    }
+}
