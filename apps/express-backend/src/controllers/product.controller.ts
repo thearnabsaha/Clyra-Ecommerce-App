@@ -27,8 +27,8 @@ export const AddProduct = async (req: Request, res: Response) => {
 export const GetAllProducts = async (req: Request, res: Response) => {
     try {
         const findAllProduct = await prisma.products.findMany({
-            where:{
-                userId:Number(req.id)
+            where: {
+                userId: Number(req.id)
             }
         })
         if (!findAllProduct) {
@@ -44,10 +44,10 @@ export const GetAllProducts = async (req: Request, res: Response) => {
 export const GetProduct = async (req: Request, res: Response) => {
     try {
         const findProductByID = await prisma.products.findFirst({
-            where:{
-                AND:[
-                    {id:req.params.id},
-                    {userId:Number(req.id)}
+            where: {
+                AND: [
+                    { id: req.params.id },
+                    { userId: Number(req.id) }
                 ]
             }
         })
@@ -63,12 +63,34 @@ export const GetProduct = async (req: Request, res: Response) => {
 }
 export const UpdateProduct = async (req: Request, res: Response) => {
     try {
-        const result = VendorSignInSchema.safeParse(req.body);
+        const result = ProductSchema.safeParse(req.body);
         if (!result.success) {
             res.status(400).json(result.error.format());
         } else {
-            res.status(200).json({ "message": "User Vendor Added!" })
-
+            const findProductByID = await prisma.products.findFirst({
+                where: {
+                    AND: [
+                        { id: req.params.id },
+                        { userId: Number(req.id) }
+                    ]
+                }
+            })
+            if (!findProductByID) {
+                res.status(404).json({ "message": "This Product Doesn't Exists!" })
+                return;
+            }
+            const product = await prisma.products.update({
+                where: {
+                    id: findProductByID.id
+                },
+                data: {
+                    title: req.body.title,
+                    description: req.body.description,
+                    price: req.body.price,
+                    image: req.body.image,
+                },
+            })
+            res.status(200).json({ "message": `Product with id ${product.id} is updated now!` })
         }
     } catch (error) {
         res.status(500).json({ "Error": error })
