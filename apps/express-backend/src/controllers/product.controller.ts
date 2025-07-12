@@ -99,16 +99,19 @@ export const UpdateProduct = async (req: Request, res: Response) => {
 }
 export const DeleteProduct = async (req: Request, res: Response) => {
     try {
-        const findAllProduct = await prisma.products.findMany({
+        const findProductByID = await prisma.products.deleteMany({
             where: {
-                userId: Number(req.id)
+                AND: [
+                    { id: req.params.id },
+                    { userId: Number(req.id) }
+                ]
             }
         })
-        if (!findAllProduct) {
-            res.status(404).json({ "message": "Products Doesn't Exists!" })
+        if (!findProductByID.count) {
+            res.status(404).json({ "message": "This Product Doesn't Exists!" })
             return;
         }
-        res.status(200).json({ "message": "User Vendor Added!" })
+        res.status(200).json({ "message": `Product with with ID ${req.params.id} is now deleted!` })
     } catch (error) {
         res.status(500).json({ "Error": error })
         console.log(error)
@@ -116,12 +119,12 @@ export const DeleteProduct = async (req: Request, res: Response) => {
 }
 export const DeleteAllProduct = async (req: Request, res: Response) => {
     try {
-        const findAllProduct = await prisma.products.deleteMany({
+        const deleteAllProduct = await prisma.products.deleteMany({
             where: {
                 userId: Number(req.id)
             }
         })
-        if (!findAllProduct.count) {
+        if (!deleteAllProduct.count) {
             res.status(404).json({ "message": "Products Doesn't Exists!" })
             return;
         }
