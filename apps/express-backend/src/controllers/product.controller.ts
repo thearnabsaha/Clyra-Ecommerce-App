@@ -2,7 +2,7 @@ import { Request, Response } from 'express';
 import { prisma } from '@workspace/database/client';
 import { CategorySchema, ProductSchema } from '@workspace/utils/types';
 
-//?vencor-controllers
+//?vendor-controllers
 export const AddProduct = async (req: Request, res: Response) => {
     try {
         const result = ProductSchema.safeParse(req.body);
