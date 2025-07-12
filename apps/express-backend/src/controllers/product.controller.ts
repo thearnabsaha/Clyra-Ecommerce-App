@@ -33,7 +33,10 @@ export const GetAllProducts = async (req: Request, res: Response) => {
         const findAllProduct = await prisma.products.findMany({
             where: {
                 userId: Number(req.id)
-            }
+            },
+            include: {
+                categories: true,
+            },
         })
         if (!findAllProduct) {
             res.status(404).json({ "message": "Products Doesn't Exists!" })
@@ -53,7 +56,10 @@ export const GetProduct = async (req: Request, res: Response) => {
                     { id: req.params.id },
                     { userId: Number(req.id) }
                 ]
-            }
+            },
+            include: {
+                categories: true,
+            },
         })
         if (!findProductByID) {
             res.status(404).json({ "message": "This Product Doesn't Exists!" })
@@ -93,7 +99,7 @@ export const UpdateProduct = async (req: Request, res: Response) => {
                     price: req.body.price,
                     image: req.body.image,
                     categories: {
-                        connect: req.body.categories
+                        set: req.body.categories
                     },
                 },
             })
