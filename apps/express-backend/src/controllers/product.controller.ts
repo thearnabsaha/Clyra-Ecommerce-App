@@ -2,6 +2,7 @@ import { Request, Response } from 'express';
 import { prisma } from '@workspace/database/client';
 import { CategorySchema, ProductSchema } from '@workspace/utils/types';
 
+//?vencor-controllers
 export const AddProduct = async (req: Request, res: Response) => {
     try {
         const result = ProductSchema.safeParse(req.body);
@@ -14,8 +15,8 @@ export const AddProduct = async (req: Request, res: Response) => {
                     description: req.body.description,
                     price: req.body.price,
                     image: req.body.image,
-                    categories:{
-                        connect:req.body.categories
+                    categories: {
+                        connect: req.body.categories
                     },
                     userId: Number(req.id),
                 },
@@ -91,6 +92,9 @@ export const UpdateProduct = async (req: Request, res: Response) => {
                     description: req.body.description,
                     price: req.body.price,
                     image: req.body.image,
+                    categories: {
+                        connect: req.body.categories
+                    },
                 },
             })
             res.status(200).json({ "message": `Product with id ${product.id} is updated now!` })
@@ -137,6 +141,7 @@ export const DeleteAllProduct = async (req: Request, res: Response) => {
         console.log(error)
     }
 }
+//?admin-controllers
 export const AddCategory = async (req: Request, res: Response) => {
     try {
         const result = CategorySchema.safeParse(req.body);
@@ -145,7 +150,7 @@ export const AddCategory = async (req: Request, res: Response) => {
         } else {
             const FindCategory = await prisma.category.findFirst({
                 where: {
-                    name: req.body.name 
+                    name: req.body.name
                 }
             })
             if (FindCategory) {
