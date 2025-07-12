@@ -99,13 +99,16 @@ export const UpdateProduct = async (req: Request, res: Response) => {
 }
 export const DeleteProduct = async (req: Request, res: Response) => {
     try {
-        const result = VendorSignInSchema.safeParse(req.body);
-        if (!result.success) {
-            res.status(400).json(result.error.format());
-        } else {
-            res.status(200).json({ "message": "User Vendor Added!" })
-
+        const findAllProduct = await prisma.products.findMany({
+            where: {
+                userId: Number(req.id)
+            }
+        })
+        if (!findAllProduct) {
+            res.status(404).json({ "message": "Products Doesn't Exists!" })
+            return;
         }
+        res.status(200).json({ "message": "User Vendor Added!" })
     } catch (error) {
         res.status(500).json({ "Error": error })
         console.log(error)
@@ -113,13 +116,16 @@ export const DeleteProduct = async (req: Request, res: Response) => {
 }
 export const DeleteAllProduct = async (req: Request, res: Response) => {
     try {
-        const result = VendorSignInSchema.safeParse(req.body);
-        if (!result.success) {
-            res.status(400).json(result.error.format());
-        } else {
-            res.status(200).json({ "message": "User Vendor Added!" })
-
+        const findAllProduct = await prisma.products.deleteMany({
+            where: {
+                userId: Number(req.id)
+            }
+        })
+        if (!findAllProduct.count) {
+            res.status(404).json({ "message": "Products Doesn't Exists!" })
+            return;
         }
+        res.status(200).json({ "message": "All Products are now deleted!" })
     } catch (error) {
         res.status(500).json({ "Error": error })
         console.log(error)
