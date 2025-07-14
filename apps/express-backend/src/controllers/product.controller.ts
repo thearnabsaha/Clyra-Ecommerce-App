@@ -130,7 +130,7 @@ export const DeleteProduct = async (req: Request, res: Response) => {
         console.log(error)
     }
 }
-//haven't build this yet
+//haven't build this yet route only
 export const DeleteAllProductsByCategory = async (req: Request, res: Response) => {
     try {
         const findProductByID = await prisma.products.deleteMany({
