@@ -6,8 +6,8 @@ const router:Router = Router();
 
 router.post("/",jwtAuth, AddCategory);
 router.get("/",jwtAuth, GetAllCategory);
-router.get("/",jwtAuth, GetProductByCategory);
-router.delete("/:slug",jwtAuth, DeleteAllProductsByCategory);
+router.get("/product",jwtAuth, GetProductByCategory);
+router.delete("/product",jwtAuth, DeleteAllProductsByCategory);
 export default router;
 
 

@@ -48,24 +48,22 @@ export const DeleteAllProductsByCategory = async (req: Request, res: Response) =
         const deleteProductByCategory = await prisma.products.deleteMany({
             where: {
                 AND: [
-                    { userId: Number(req.id) },
+                    { id: req.params.id },
                     {
                         categories: {
                             some: {
-                                name: {
-                                    in: req.body.category
-                                }
+                                name: String(req.query.name)
                             }
                         }
                     }
                 ]
-            }
+            },
         })
-        if (!deleteProductByCategory.count) {
+        if (!deleteProductByCategory) {
             res.status(404).json({ "message": "This Product Doesn't Exists!" })
             return;
         }
-        res.status(200).json({ "message": `Product with with ID ${req.params.id} is now deleted!` })
+        res.status(200).json({ "message": deleteProductByCategory })
     } catch (error) {
         res.status(500).json({ "Error": error })
         console.log(error)
@@ -73,11 +71,17 @@ export const DeleteAllProductsByCategory = async (req: Request, res: Response) =
 }
 export const GetProductByCategory = async (req: Request, res: Response) => {
     try {
-        const findProductByCategory = await prisma.products.findFirst({
+        const findProductByCategory = await prisma.products.findMany({
             where: {
                 AND: [
                     { id: req.params.id },
-                    { userId: Number(req.id) }
+                    {
+                        categories: {
+                            some: {
+                                name: String(req.query.name)
+                            }
+                        }
+                    }
                 ]
             },
             include: {
