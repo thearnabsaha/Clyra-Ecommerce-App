@@ -42,8 +42,77 @@ export const GetAllCategory = async (req: Request, res: Response) => {
         console.log(error)
     }
 }
-//haven't build this yet route only
-export const DeleteAllProductsByCategory = async (req: Request, res: Response) => {
+//it will delete all products in this category and delinks products if they had more than one Products
+export const DeleteAllProductsByCategorySoft = async (req: Request, res: Response) => {
+    try {
+        const findProductByCategory = await prisma.products.findMany({
+            where: {
+                AND: [
+                    { id: req.params.id },
+                    {
+                        categories: {
+                            some: {
+                                name: String(req.query.name)
+                            }
+                        }
+                    }
+                ]
+            },
+            include: {
+                categories: true
+            }
+        })
+        if (!findProductByCategory) {
+            res.status(404).json({ "message": "This Product Doesn't Exists!" })
+            return;
+        }
+        const ProductsWithSingleCategory = findProductByCategory.filter((e) => {
+            return e.categories.length == 1
+        })
+        const ProductsForDelete = ProductsWithSingleCategory.map((e) => {
+            return e.id
+        })
+        const deleteProductByCategory = await prisma.products.deleteMany({
+            where: {
+                AND: [
+                    {
+                        id: {
+                            in: ProductsForDelete
+                        }
+                    }
+                ]
+            },
+        })
+        const ProductsWithManyId = findProductByCategory.filter((e) => {
+            return e.categories.length != 1
+        })
+        const ProductsAfterDelink=ProductsWithManyId.filter((e)=>{
+            e.categories=e.categories.filter((e)=>e.name!==req.query.name)
+            return e.categories
+        })
+        ProductsAfterDelink.forEach(async (e)=>{
+            await prisma.products.update({
+                where:{
+                    id:e.id
+                },
+                data:{
+                    categories:{
+                        disconnect:{
+                            name:String(req.query.name)
+                        }
+                    }
+                }
+            })
+        })
+        res.status(200).json({ "message":`Products of catagory name : ${req.query.name} are deleted!` })
+    } catch (error) {
+        res.status(500).json({ "Error": error })
+        console.log(error)
+    }
+}
+//it will delete all products in this category even if it has more than one category
+//!will make this route
+export const DeleteAllProductsByCategoryHard = async (req: Request, res: Response) => {
     try {
         const findProductByCategory = await prisma.products.findMany({
             where: {
