@@ -24,10 +24,12 @@ model Category {
 model Products {
   id          String        @id @default(uuid()) @unique
   title       String
+  brand       String
   description String
   image       String?
   price       Int
   userId      Int
+  StockAmount Int
   user        Vendor        @relation(fields: [userId], references: [id])
   categories  Category[]    @relation("ProductCategories")
   time        DateTime      @default(now())
