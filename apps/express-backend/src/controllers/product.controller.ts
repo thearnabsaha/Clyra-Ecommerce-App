@@ -14,8 +14,8 @@ export const AddProduct = async (req: Request, res: Response) => {
                     description: req.body.description,
                     price: req.body.price,
                     image: req.body.image,
-                    brand:req.body.brand,
-                    StockAmount:req.body.StockAmount,
+                    brand: req.body.brand,
+                    StockAmount: req.body.StockAmount,
                     categories: {
                         connect: req.body.categories
                     },
@@ -99,6 +99,8 @@ export const UpdateProduct = async (req: Request, res: Response) => {
                     description: req.body.description,
                     price: req.body.price,
                     image: req.body.image,
+                    brand: req.body.brand,
+                    StockAmount: req.body.StockAmount,
                     categories: {
                         set: req.body.categories
                     },
