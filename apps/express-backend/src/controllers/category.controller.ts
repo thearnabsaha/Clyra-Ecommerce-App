@@ -42,6 +42,59 @@ export const GetAllCategory = async (req: Request, res: Response) => {
         console.log(error)
     }
 }
+//!
+export const UpdateCategory = async (req: Request, res: Response) => {
+    try {
+        const findAllCategory = await prisma.category.findFirst({
+            where:{
+                name:req.body.name
+            }
+        })
+        if (!findAllCategory) {
+            res.status(404).json({ "message": "Category Doesn't Exists!" })
+            return;
+        }
+        await prisma.category.update({
+            where:{
+                name:req.body.name
+            },
+            data:{
+                name:req.body.newName
+            }
+        })
+        res.status(200).json({ "message": "Updated Catagory!" })
+    } catch (error) {
+        res.status(500).json({ "Error": error })
+        console.log(error)
+    }
+}
+export const DeleteCategory = async (req: Request, res: Response) => {
+    try {
+        const findAllCategory = await prisma.category.deleteMany({})
+        if (!findAllCategory) {
+            res.status(404).json({ "message": "Category Doesn't Exists!" })
+            return;
+        }
+        res.status(200).json({ "message": findAllCategory })
+    } catch (error) {
+        res.status(500).json({ "Error": error })
+        console.log(error)
+    }
+}
+export const DeleteAllCategory = async (req: Request, res: Response) => {
+    try {
+        const findAllCategory = await prisma.category.findMany({})
+        if (!findAllCategory.length) {
+            res.status(404).json({ "message": "Category Doesn't Exists!" })
+            return;
+        }
+        await prisma.category.deleteMany({})
+        res.status(200).json({ "message":"Deleted all Catagories"})
+    } catch (error) {
+        res.status(500).json({ "Error": error })
+        console.log(error)
+    }
+}
 //it will delete all products in this category and delinks products if they had more than one Products
 export const DeleteAllProductsByCategorySoft = async (req: Request, res: Response) => {
     try {
