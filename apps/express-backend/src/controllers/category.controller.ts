@@ -62,7 +62,7 @@ export const DeleteAllProductsByCategorySoft = async (req: Request, res: Respons
                 categories: true
             }
         })
-        if (!findProductByCategory) {
+        if (!findProductByCategory.length) {
             res.status(404).json({ "message": "This Product Doesn't Exists!" })
             return;
         }
@@ -111,7 +111,6 @@ export const DeleteAllProductsByCategorySoft = async (req: Request, res: Respons
     }
 }
 //it will delete all products in this category even if it has more than one category
-//!will make this route
 export const DeleteAllProductsByCategoryHard = async (req: Request, res: Response) => {
     try {
         const findProductByCategory = await prisma.products.findMany({
@@ -131,17 +130,14 @@ export const DeleteAllProductsByCategoryHard = async (req: Request, res: Respons
                 categories: true
             }
         })
-        if (!findProductByCategory) {
+        if (!findProductByCategory.length) {
             res.status(404).json({ "message": "This Product Doesn't Exists!" })
             return;
         }
-        const ProductsWithSingleCategory = findProductByCategory.filter((e) => {
-            return e.categories.length == 1
-        })
-        const ProductsForDelete = ProductsWithSingleCategory.map((e) => {
+        const ProductsForDelete = findProductByCategory.map((e) => {
             return e.id
         })
-        const deleteProductByCategory = await prisma.products.deleteMany({
+        await prisma.products.deleteMany({
             where: {
                 AND: [
                     {
@@ -151,27 +147,6 @@ export const DeleteAllProductsByCategoryHard = async (req: Request, res: Respons
                     }
                 ]
             },
-        })
-        const ProductsWithManyId = findProductByCategory.filter((e) => {
-            return e.categories.length != 1
-        })
-        const ProductsAfterDelink=ProductsWithManyId.filter((e)=>{
-            e.categories=e.categories.filter((e)=>e.name!==req.query.name)
-            return e.categories
-        })
-        ProductsAfterDelink.forEach(async (e)=>{
-            await prisma.products.update({
-                where:{
-                    id:e.id
-                },
-                data:{
-                    categories:{
-                        disconnect:{
-                            name:String(req.query.name)
-                        }
-                    }
-                }
-            })
         })
         res.status(200).json({ "message":`Products of catagory name : ${req.query.name} are deleted!` })
     } catch (error) {
