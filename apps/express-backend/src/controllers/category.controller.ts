@@ -42,7 +42,6 @@ export const GetAllCategory = async (req: Request, res: Response) => {
         console.log(error)
     }
 }
-//!
 export const UpdateCategory = async (req: Request, res: Response) => {
     try {
         const findAllCategory = await prisma.category.findFirst({
@@ -70,12 +69,21 @@ export const UpdateCategory = async (req: Request, res: Response) => {
 }
 export const DeleteCategory = async (req: Request, res: Response) => {
     try {
-        const findAllCategory = await prisma.category.deleteMany({})
+        const findAllCategory = await prisma.category.findFirst({
+            where:{
+                name:req.params.name
+            }
+        })
         if (!findAllCategory) {
             res.status(404).json({ "message": "Category Doesn't Exists!" })
             return;
         }
-        res.status(200).json({ "message": findAllCategory })
+        await prisma.category.delete({
+            where:{
+                name:req.params.name
+            }
+        })
+        res.status(200).json({ "message":`Deleted Catagory with name ${req.params.name}`})
     } catch (error) {
         res.status(500).json({ "Error": error })
         console.log(error)
