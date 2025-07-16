@@ -150,3 +150,46 @@ export const DeleteAllProduct = async (req: Request, res: Response) => {
         console.log(error)
     }
 }
+
+//will add it here
+export const UpdateStock = async (req: Request, res: Response) => {
+    try {
+        const result = ProductSchema.safeParse(req.body);
+        if (!result.success) {
+            res.status(400).json(result.error.format());
+        } else {
+            const findProductByID = await prisma.products.findFirst({
+                where: {
+                    AND: [
+                        { id: req.params.id },
+                        { userId: Number(req.id) }
+                    ]
+                }
+            })
+            if (!findProductByID) {
+                res.status(404).json({ "message": "This Product Doesn't Exists!" })
+                return;
+            }
+            const product = await prisma.products.update({
+                where: {
+                    id: findProductByID.id
+                },
+                data: {
+                    title: req.body.title,
+                    description: req.body.description,
+                    price: req.body.price,
+                    image: req.body.image,
+                    brand: req.body.brand,
+                    StockAmount: req.body.StockAmount,
+                    categories: {
+                        set: req.body.categories
+                    },
+                },
+            })
+            res.status(200).json({ "message": `Product with id ${product.id} is updated now!` })
+        }
+    } catch (error) {
+        res.status(500).json({ "Error": error })
+        console.log(error)
+    }
+}
