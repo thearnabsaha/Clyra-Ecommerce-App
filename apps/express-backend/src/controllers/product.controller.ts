@@ -193,5 +193,3 @@ export const UpdateStock = async (req: Request, res: Response) => {
         console.log(error)
     }
 }
-
-hi
