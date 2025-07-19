@@ -11,7 +11,7 @@ export const VendorSignUpSchema = z.object({
         .regex(/[@$!%*?&]/, { message: 'Password must contain at least one special character' }),
 });
 export const VendorSignInSchema = z.object({
-    email: z.string().min(3, { message: 'email must be at least 3 characters long' }),
+    email: z.string().email({ message: 'Invalid email address' }),
     password: z
         .string()
         .min(8, { message: 'Password must be at least 8 characters long' })
@@ -33,8 +33,8 @@ export const CategorySchema = z.object({
 });
 export const CustomerSignUpSchema = z.object({
     email: z.string().email({ message: 'Invalid email address' }),
-    firstname: z.string().min(3, { message: 'Username must be at least 3 characters long' }),
-    lastname: z.string().min(1, { message: 'Username must be at least 1 characters long' }),
+    firstname: z.string().min(3, { message: 'Firstname must be at least 3 characters long' }),
+    lastname: z.string().min(1, { message: 'Lastname must be at least 1 characters long' }),
     password: z
         .string()
         .min(8, { message: 'Password must be at least 8 characters long' })
@@ -44,7 +44,7 @@ export const CustomerSignUpSchema = z.object({
         .regex(/[@$!%*?&]/, { message: 'Password must contain at least one special character' }),
 });
 export const CustomerSignInSchema = z.object({
-    email: z.string().min(3, { message: 'Username must be at least 3 characters long' }),
+    email: z.string().email({ message: 'Invalid email address' }),
     password: z
         .string()
         .min(8, { message: 'Password must be at least 8 characters long' })
