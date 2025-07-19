@@ -11,6 +11,7 @@ import vendorRoutes from './routes/vendor.route'
 import serverRoutes from './routes/server.route'
 import productRoutes from './routes/product.route'
 import categoryRoutes from './routes/category.route'
+import customerRoutes from './routes/customer.route'
 const morganFormat = ':method :url :status :response-time ms';
 
 app.use(morgan(morganFormat));
@@ -30,4 +31,5 @@ app.use('/',serverRoutes);
 app.use('/vendor/',vendorRoutes);
 app.use('/product',productRoutes);
 app.use('/category',categoryRoutes);
+app.use('/customer',customerRoutes);
 app.listen(port, () => console.log('> Server is up and running on port: ' + port));

@@ -1,7 +1,7 @@
 import { z } from 'zod';
 export const VendorSignUpSchema = z.object({
     email: z.string().email({ message: 'Invalid email address' }),
-    name: z.string().min(3, { message: 'Username must be at least 3 characters long' }),
+    name: z.string().min(3, { message: 'Name must be at least 3 characters long' }),
     password: z
         .string()
         .min(8, { message: 'Password must be at least 8 characters long' })
@@ -11,7 +11,7 @@ export const VendorSignUpSchema = z.object({
         .regex(/[@$!%*?&]/, { message: 'Password must contain at least one special character' }),
 });
 export const VendorSignInSchema = z.object({
-    email: z.string().min(3, { message: 'Username must be at least 3 characters long' }),
+    email: z.string().min(3, { message: 'email must be at least 3 characters long' }),
     password: z
         .string()
         .min(8, { message: 'Password must be at least 8 characters long' })
@@ -30,4 +30,26 @@ export const ProductSchema = z.object({
 });
 export const CategorySchema = z.object({
     name: z.string().min(3, { message: 'title must be at least 3 characters long' }),
+});
+export const CustomerSignUpSchema = z.object({
+    email: z.string().email({ message: 'Invalid email address' }),
+    firstname: z.string().min(3, { message: 'Username must be at least 3 characters long' }),
+    lastname: z.string().min(1, { message: 'Username must be at least 1 characters long' }),
+    password: z
+        .string()
+        .min(8, { message: 'Password must be at least 8 characters long' })
+        .regex(/[A-Z]/, { message: 'Password must contain at least one uppercase letter' })
+        .regex(/[a-z]/, { message: 'Password must contain at least one lowercase letter' })
+        .regex(/[0-9]/, { message: 'Password must contain at least one number' })
+        .regex(/[@$!%*?&]/, { message: 'Password must contain at least one special character' }),
+});
+export const CustomerSignInSchema = z.object({
+    email: z.string().min(3, { message: 'Username must be at least 3 characters long' }),
+    password: z
+        .string()
+        .min(8, { message: 'Password must be at least 8 characters long' })
+        .regex(/[A-Z]/, { message: 'Password must contain at least one uppercase letter' })
+        .regex(/[a-z]/, { message: 'Password must contain at least one lowercase letter' })
+        .regex(/[0-9]/, { message: 'Password must contain at least one number' })
+        .regex(/[@$!%*?&]/, { message: 'Password must contain at least one special character' }),
 });
