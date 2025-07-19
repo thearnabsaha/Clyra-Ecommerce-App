@@ -1,1 +1,2 @@
-export const JWT_SECRET="thisismyjsonwebtokensecret";
+export const JWT_SECRET_VENDOR="thisismyjsonwebtokensecretforvendor";
+export const JWT_SECRET_CUSTOMER="thisismyjsonwebtokensecretforcustomer";

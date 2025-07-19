@@ -22,14 +22,14 @@ export const VendorSignInSchema = z.object({
 });
 export const ProductSchema = z.object({
     title: z.string().min(3, { message: 'title must be at least 3 characters long' }),
-    description: z.string().min(5, { message: 'title must be at least 5 characters long' }),
+    description: z.string().min(5, { message: 'description must be at least 5 characters long' }),
     image: z.string(),
     brand:z.string(),
     StockAmount:z.number(),
     price: z.number().min(1, { message: 'title must be at least 5 characters long' }),
 });
 export const CategorySchema = z.object({
-    name: z.string().min(3, { message: 'title must be at least 3 characters long' }),
+    name: z.string().min(3, { message: 'catagory name must be at least 3 characters long' }),
 });
 export const CustomerSignUpSchema = z.object({
     email: z.string().email({ message: 'Invalid email address' }),

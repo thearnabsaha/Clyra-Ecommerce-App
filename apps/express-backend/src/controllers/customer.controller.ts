@@ -3,7 +3,7 @@ import { prisma } from '@workspace/database/client';
 import { CustomerSignInSchema, CustomerSignUpSchema } from '@workspace/utils/types';
 import bcrypt from 'bcrypt'
 import jwt from 'jsonwebtoken'
-import { JWT_SECRET } from '../config';
+import { JWT_SECRET_CUSTOMER } from '../config';
 export const CustomerSignup = async (req: Request, res: Response) => {
     try {
         const result = CustomerSignUpSchema.safeParse(req.body);
@@ -58,7 +58,7 @@ export const CustomerSignin = async (req: Request, res: Response) => {
                 res.status(401).json({ "message": "Wrong Password!" })
                 return;
             }
-            var token = jwt.sign({ id: findUser.id }, JWT_SECRET, { expiresIn: "1h" });
+            var token = jwt.sign({ id: findUser.id }, JWT_SECRET_CUSTOMER, { expiresIn: "1h" });
             res.status(200).json({ "token": token })
         }
     } catch (error) {
