@@ -10,7 +10,7 @@ router.delete("/",jwtAuthVendor, DeleteAllCategory);
 router.delete("/:name",jwtAuthVendor, DeleteCategory);
 router.put("/",jwtAuthVendor, UpdateCategory);
 router.get("/product",jwtAuthVendor, GetProductByCategory);
-router.delete("/product",jwtAuthVendor, DeleteAllProductsByCategorySoft);
+router.delete("/product/soft",jwtAuthVendor, DeleteAllProductsByCategorySoft);
 router.delete("/product/hard",jwtAuthVendor, DeleteAllProductsByCategoryHard);
 export default router;
 
