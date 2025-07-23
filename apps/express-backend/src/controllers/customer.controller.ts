@@ -10,7 +10,6 @@ export const CustomerSignup = async (req: Request, res: Response) => {
         if (!result.success) {
             res.status(400).json(result.error.format());
         } else {
-            //@ts-ignore
             const findUser = await prisma.customer.findFirst({
                 where: {
                     email: req.body.email,
@@ -21,7 +20,6 @@ export const CustomerSignup = async (req: Request, res: Response) => {
                 return;
             }
             const hashedPassword = await bcrypt.hash(req.body.password, 8)
-            //@ts-ignore
             const user = await prisma.customer.create({
                 data: {
                     firstname: req.body.firstname,
@@ -43,7 +41,6 @@ export const CustomerSignin = async (req: Request, res: Response) => {
         if (!result.success) {
             res.status(400).json(result.error.format());
         } else {
-            //@ts-ignore
             const findUser = await prisma.customer.findFirst({
                 where: {
                     email: req.body.email,
@@ -68,7 +65,6 @@ export const CustomerSignin = async (req: Request, res: Response) => {
 }
 export const CustomerProfile = async (req: Request, res: Response) => {
     try {
-            //@ts-ignore
         const findUser = await prisma.customer.findFirst({
             where: {
                 id:Number(req.id)
