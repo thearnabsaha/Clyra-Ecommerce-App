@@ -33,3 +33,5 @@ app.use('/product',productRoutes);
 app.use('/category',categoryRoutes);
 app.use('/customer',customerRoutes);
 app.listen(port, () => console.log('> Server is up and running on port: ' + port));
+
+hi
