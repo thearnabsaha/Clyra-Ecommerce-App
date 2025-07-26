@@ -80,3 +80,42 @@ export const CustomerProfile = async (req: Request, res: Response) => {
         console.log(error)
     }
 }
+export const GetAllProductsForCustomers = async (req: Request, res: Response) => {
+    try {
+        const findAllProduct = await prisma.products.findMany({
+            include: {
+                categories: true,
+            },
+        })
+        if (!findAllProduct) {
+            res.status(404).json({ "message": "Products Doesn't Exists!" })
+            return;
+        }
+        res.status(200).json({ "message": findAllProduct })
+    } catch (error) {
+        res.status(500).json({ "Error": error })
+        console.log(error)
+    }
+}
+export const GetProductForCustomers = async (req: Request, res: Response) => {
+    try {
+        const findProductByID = await prisma.products.findFirst({
+            where: {
+                AND: [
+                    { id: req.params.id },
+                ]
+            },
+            include: {
+                categories: true,
+            },
+        })
+        if (!findProductByID) {
+            res.status(404).json({ "message": "This Product Doesn't Exists!" })
+            return;
+        }
+        res.status(200).json({ "message": findProductByID })
+    } catch (error) {
+        res.status(500).json({ "Error": error })
+        console.log(error)
+    }
+}
