@@ -32,13 +32,24 @@ model Products {
   StockAmount Int
   user        Vendor        @relation(fields: [userId], references: [id])
   categories  Category[]    @relation("ProductCategories")
+  carts       Cart[]      @relation("ProductInCarts")
   time        DateTime      @default(now())
 }
+
 model Customer {
-  id          Int        @id @default(autoincrement())
-  email       String     @unique
-  firstname   String
-  lastname    String
-  password    String
-  time        DateTime   @default(now())
+  id         Int       @id @default(autoincrement())
+  email      String    @unique
+  firstname  String
+  lastname   String
+  password   String
+  cart       Cart[]
+  time       DateTime  @default(now())
+}
+
+model Cart {
+  id          String      @id @default(uuid()) @unique
+  userId      Int
+  user        Customer    @relation(fields: [userId], references: [id])
+  products    Products[]  @relation("ProductInCarts")
+  time        DateTime    @default(now())
 }
