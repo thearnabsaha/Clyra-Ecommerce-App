@@ -8,21 +8,21 @@ datasource db {
 }
 
 model Vendor {
-  id          Int        @id @default(autoincrement())
-  email       String     @unique
+  id          Int          @id @default(autoincrement())
+  email       String       @unique
   name        String
   password    String
   products    Products[]
-  time        DateTime   @default(now())
+  time        DateTime     @default(now())
 }
 model Category {
-  id        Int         @id @default(autoincrement())
-  name      String      @unique
-  products  Products[]  @relation("ProductCategories")
+  id        Int            @id @default(autoincrement())
+  name      String         @unique
+  products  Products[]     @relation("ProductCategories")
 }
 
 model Products {
-  id          String        @id @default(uuid()) @unique
+  id          String       @id @default(uuid()) @unique
   title       String
   brand       String
   description String
@@ -30,26 +30,37 @@ model Products {
   price       Int
   userId      Int
   StockAmount Int
-  user        Vendor        @relation(fields: [userId], references: [id])
-  categories  Category[]    @relation("ProductCategories")
-  carts       Cart[]      @relation("ProductInCarts")
-  time        DateTime      @default(now())
+  user        Vendor       @relation(fields: [userId], references: [id])
+  categories  Category[]   @relation("ProductCategories")
+  cartItems   CartItem[]
+  time        DateTime     @default(now())
 }
 
 model Customer {
-  id         Int       @id @default(autoincrement())
-  email      String    @unique
-  firstname  String
-  lastname   String
-  password   String
-  cart       Cart[]
-  time       DateTime  @default(now())
+  id        Int      @id @default(autoincrement())
+  email     String   @unique
+  firstname String
+  lastname  String
+  password  String
+  carts     Cart[]
+  time      DateTime @default(now())
 }
 
 model Cart {
-  id          String      @id @default(uuid()) @unique
-  userId      Int
-  user        Customer    @relation(fields: [userId], references: [id])
-  products    Products[]  @relation("ProductInCarts")
-  time        DateTime    @default(now())
+  id         String     @id @default(uuid())
+  customerId Int
+  customer   Customer   @relation(fields: [customerId], references: [id])
+  items      CartItem[]
+  time       DateTime   @default(now())
+}
+
+model CartItem {
+  id        Int      @id @default(autoincrement())
+  cartId    String
+  productId String
+  quantity  Int
+  cart      Cart     @relation(fields: [cartId], references: [id])
+  product   Products  @relation(fields: [productId], references: [id])
+
+  @@unique([cartId, productId])
 }
