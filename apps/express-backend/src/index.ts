@@ -18,20 +18,17 @@ const morganFormat = ':method :url :status :response-time ms';
 app.use(morgan(morganFormat));
 app.use(helmet());
 
-app.use(cors({
-  origin: process.env.CORS_ORIGIN,
-  credentials: true,
-}));
+app.use(cors());
 
 app.use(express.json({ limit: '16kb' }));
 app.use(express.urlencoded({ extended: true, limit: '16kb' }));
 app.use(express.static('public'));
 app.use(cookieParser());
 
-app.use('/',serverRoutes);
-app.use('/vendor/',vendorRoutes);
-app.use('/product',productRoutes);
-app.use('/category',categoryRoutes);
-app.use('/customer',customerRoutes);
-app.use('/cart',cartRoutes);
+app.use('/', serverRoutes);
+app.use('/vendor/', vendorRoutes);
+app.use('/product', productRoutes);
+app.use('/category', categoryRoutes);
+app.use('/customer', customerRoutes);
+app.use('/cart', cartRoutes);
 app.listen(port, () => console.log('> Server is up and running on port: ' + port));

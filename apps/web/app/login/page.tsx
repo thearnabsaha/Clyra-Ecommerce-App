@@ -5,6 +5,7 @@ import { useForm, FieldValues } from "react-hook-form"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@workspace/ui/components/tabs"
 import { CustomerSignInSchema, CustomerSignUpSchema } from '@workspace/utils/types';
 import { Button } from "@workspace/ui/components/button"
+import axios from 'axios';
 import {
     Form,
     FormControl,
@@ -14,6 +15,7 @@ import {
     FormMessage,
 } from "@workspace/ui/components/form"
 import { Input } from "@workspace/ui/components/input"
+import { BACKEND_URL } from "@/lib/config"
 const page = () => {
     const SignUpform = useForm<FieldValues>({
         resolver: zodResolver(CustomerSignUpSchema),
@@ -31,9 +33,26 @@ const page = () => {
             password: "",
         },
     })
-    function onSubmit(values: z.infer<typeof CustomerSignInSchema>) {
-        console.log(values)
+    function SignuponSubmit(values: z.infer<typeof CustomerSignInSchema>) {
+        // console.log(values)
+        axios.post(`${BACKEND_URL}/customer/signup`, values)
+            .then(function (response) {
+                // console.log(response);
+            })
+            .catch(function (error) {
+                console.log(error);
+            });
         SignUpform.reset()
+    }
+    function SigninonSubmit(values: z.infer<typeof CustomerSignInSchema>) {
+        // console.log(values)
+        axios.post(`${BACKEND_URL}/customer/signin`, values)
+            .then(function (response) {
+                // console.log(response);
+            })
+            .catch(function (error) {
+                console.log(error);
+            });
         SignInform.reset()
     }
     return (
@@ -48,7 +67,7 @@ const page = () => {
                     <div className="pt-10">
                         <TabsContent value="login">
                             <Form {...SignInform}>
-                                <form onSubmit={SignInform.handleSubmit(onSubmit)} className="w-full space-y-6">
+                                <form onSubmit={SignInform.handleSubmit(SigninonSubmit)} className="w-full space-y-6">
                                     <FormField
                                         control={SignInform.control}
                                         name="email"
@@ -76,7 +95,7 @@ const page = () => {
                                         )}
                                     />
                                     <div>
-                                        <Button type="submit" className="w-full h-12">Submit</Button>
+                                        <Button type="submit" className="w-full h-12">LOGIN</Button>
                                         <Button variant="outline" className="w-full mt-2 h-12"> Login With Google</Button>
                                     </div>
                                 </form>
@@ -84,7 +103,7 @@ const page = () => {
                         </TabsContent>
                         <TabsContent value="signup">
                             <Form {...SignUpform}>
-                                <form onSubmit={SignUpform.handleSubmit(onSubmit)} className="w-full space-y-6">
+                                <form onSubmit={SignUpform.handleSubmit(SignuponSubmit)} className="w-full space-y-6">
                                     <div className="flex justify-between">
                                         <FormField
                                             control={SignUpform.control}
@@ -140,7 +159,7 @@ const page = () => {
                                         )}
                                     />
                                     <div>
-                                        <Button type="submit" className="w-full h-12">Submit</Button>
+                                        <Button type="submit" className="w-full h-12">SIGNUP</Button>
                                         <Button variant="outline" className="w-full mt-2 h-12"> Login With Google</Button>
                                     </div>
                                 </form>
