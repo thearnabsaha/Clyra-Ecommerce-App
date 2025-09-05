@@ -23,7 +23,13 @@ export default function RootLayout({
       <body
         className={`${fontSans.variable} ${fontMono.variable} font-sans antialiased `}
       >
-        <Providers>{children}</Providers>
+        <Providers>
+          <div className=" flex justify-center bg-accent">
+            <div className=" w-[500px] h-screen border bg-white">
+              {children}
+            </div>
+          </div>
+        </Providers>
       </body>
     </html>
   )
