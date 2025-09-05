@@ -25,7 +25,7 @@ export default function RootLayout({
       >
         <Providers>
           <div className=" flex justify-center bg-accent">
-            <div className=" w-[500px] h-screen border bg-white">
+            <div className="h-screen border bg-white p-10">
               {children}
             </div>
           </div>

@@ -24,8 +24,8 @@ export const ProductSchema = z.object({
     title: z.string().min(3, { message: 'title must be at least 3 characters long' }),
     description: z.string().min(5, { message: 'description must be at least 5 characters long' }),
     image: z.string(),
-    brand:z.string(),
-    StockAmount:z.number(),
+    brand: z.string(),
+    StockAmount: z.number(),
     price: z.number().min(1, { message: 'title must be at least 5 characters long' }),
 });
 export const CategorySchema = z.object({
@@ -33,8 +33,8 @@ export const CategorySchema = z.object({
 });
 export const CustomerSignUpSchema = z.object({
     email: z.string().email({ message: 'Invalid email address' }),
-    firstname: z.string().min(3, { message: 'Firstname must be at least 3 characters long' }),
-    lastname: z.string().min(1, { message: 'Lastname must be at least 1 characters long' }),
+    firstname: z.string().min(3, { message: 'Firstname required' }),
+    lastname: z.string().min(1, { message: 'Lastname required' }),
     password: z
         .string()
         .min(8, { message: 'Password must be at least 8 characters long' })

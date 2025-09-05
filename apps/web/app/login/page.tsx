@@ -1,16 +1,13 @@
 "use client"
 import { z } from "zod"
 import { zodResolver } from "@hookform/resolvers/zod"
-import { useForm } from "react-hook-form"
+import { useForm, FieldValues } from "react-hook-form"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@workspace/ui/components/tabs"
-const formSchema = z.object({
-    username: z.string().min(2).max(50),
-})
+import { CustomerSignInSchema, CustomerSignUpSchema } from '@workspace/utils/types';
 import { Button } from "@workspace/ui/components/button"
 import {
     Form,
     FormControl,
-    FormDescription,
     FormField,
     FormItem,
     FormLabel,
@@ -18,54 +15,136 @@ import {
 } from "@workspace/ui/components/form"
 import { Input } from "@workspace/ui/components/input"
 const page = () => {
-    const form = useForm<z.infer<typeof formSchema>>({
-        resolver: zodResolver(formSchema),
+    const SignUpform = useForm<FieldValues>({
+        resolver: zodResolver(CustomerSignUpSchema),
         defaultValues: {
-            username: "",
+            email: "",
+            password: "",
+            firstname: "",
+            lastname: "",
         },
     })
-    function onSubmit(values: z.infer<typeof formSchema>) {
+    const SignInform = useForm<FieldValues>({
+        resolver: zodResolver(CustomerSignInSchema),
+        defaultValues: {
+            email: "",
+            password: "",
+        },
+    })
+    function onSubmit(values: z.infer<typeof CustomerSignInSchema>) {
         console.log(values)
+        SignUpform.reset()
+        SignInform.reset()
     }
     return (
         <div>
             <div className='flex flex-col items-center mt-10 justify-center bg-white'>
                 <h1 className=' text-4xl'>Clyra</h1>
                 <Tabs defaultValue="login" className="mt-5">
-                    <TabsList className="">
-                        <TabsTrigger value="login" className="text-2xl cursor-pointer rounded-none px-18 py-5 font-normal focus:border-foreground focus:font-semibold">LOGIN</TabsTrigger>
-                        <TabsTrigger value="signup" className="text-2xl cursor-pointer rounded-none px-18 py-5 font-normal focus:border-foreground focus:font-semibold">SIGNUP</TabsTrigger>
+                    <TabsList className=" bg-transparent shadow-none">
+                        <TabsTrigger value="login" className="text-2xl cursor-pointer rounded-none px-18 py-5 font-normal focus:border-foreground border-b- focus:font-semibold">LOGIN</TabsTrigger>
+                        <TabsTrigger value="signup" className="text-2xl cursor-pointer rounded-none px-18 py-5 font-normal focus:border-foreground border-b- focus:font-semibold">SIGNUP</TabsTrigger>
                     </TabsList>
                     <div className="pt-10">
                         <TabsContent value="login">
-                            <div className="border">
-                                <h1>Log in using Email</h1>
-                                <Form {...form}>
-                                    <form onSubmit={form.handleSubmit(onSubmit)} className="w-2/3 space-y-6">
+                            <Form {...SignInform}>
+                                <form onSubmit={SignInform.handleSubmit(onSubmit)} className="w-full space-y-6">
+                                    <FormField
+                                        control={SignInform.control}
+                                        name="email"
+                                        render={({ field }) => (
+                                            <FormItem>
+                                                <FormLabel>Log in using Email</FormLabel>
+                                                <FormControl>
+                                                    <Input className="h-12 placeholder:text-lg" placeholder="Enter Email" {...field} />
+                                                </FormControl>
+                                                <FormMessage />
+                                            </FormItem>
+                                        )}
+                                    />
+                                    <FormField
+                                        control={SignInform.control}
+                                        name="password"
+                                        render={({ field }) => (
+                                            <FormItem>
+                                                <FormLabel>Enter Your Password</FormLabel>
+                                                <FormControl>
+                                                    <Input className="h-12 placeholder:text-lg" placeholder="Enter Password" {...field} type="password" />
+                                                </FormControl>
+                                                <FormMessage />
+                                            </FormItem>
+                                        )}
+                                    />
+                                    <div>
+                                        <Button type="submit" className="w-full h-12">Submit</Button>
+                                        <Button variant="outline" className="w-full mt-2 h-12"> Login With Google</Button>
+                                    </div>
+                                </form>
+                            </Form>
+                        </TabsContent>
+                        <TabsContent value="signup">
+                            <Form {...SignUpform}>
+                                <form onSubmit={SignUpform.handleSubmit(onSubmit)} className="w-full space-y-6">
+                                    <div className="flex justify-between">
                                         <FormField
-                                            control={form.control}
-                                            name="username"
+                                            control={SignUpform.control}
+                                            name="firstname"
                                             render={({ field }) => (
-                                                <FormItem>
-                                                    <FormLabel>Username</FormLabel>
+                                                <FormItem className="w-full mr-3">
+                                                    <FormLabel>First Name</FormLabel>
                                                     <FormControl>
-                                                        <Input placeholder="shadcn" {...field} />
+                                                        <Input className="h-12 placeholder:text-lg" placeholder="First Name" {...field} />
                                                     </FormControl>
-                                                    <FormDescription>
-                                                        This is your public display name.
-                                                    </FormDescription>
                                                     <FormMessage />
                                                 </FormItem>
                                             )}
                                         />
-                                        <Button type="submit">Submit</Button>
-                                    </form>
-                                </Form>
-                                <h1>Enter Your Password</h1>
-                            </div>
-                        </TabsContent>
-                        <TabsContent value="signup">
-                            <h1>SignUp</h1>
+                                        <FormField
+                                            control={SignUpform.control}
+                                            name="lastname"
+                                            render={({ field }) => (
+                                                <FormItem className="w-full">
+                                                    <FormLabel>Last Name</FormLabel>
+                                                    <FormControl>
+                                                        <Input className="h-12 placeholder:text-lg" placeholder="Last Name" {...field} />
+                                                    </FormControl>
+                                                    <FormMessage />
+                                                </FormItem>
+                                            )}
+                                        />
+                                    </div>
+                                    <FormField
+                                        control={SignUpform.control}
+                                        name="email"
+                                        render={({ field }) => (
+                                            <FormItem>
+                                                <FormLabel>Log in using Email</FormLabel>
+                                                <FormControl>
+                                                    <Input className="h-12 placeholder:text-lg" placeholder="Enter Email" {...field} />
+                                                </FormControl>
+                                                <FormMessage />
+                                            </FormItem>
+                                        )}
+                                    />
+                                    <FormField
+                                        control={SignUpform.control}
+                                        name="password"
+                                        render={({ field }) => (
+                                            <FormItem>
+                                                <FormLabel>Enter Your Password</FormLabel>
+                                                <FormControl>
+                                                    <Input className="h-12 placeholder:text-lg" placeholder="Enter Password" {...field} type="password" />
+                                                </FormControl>
+                                                <FormMessage />
+                                            </FormItem>
+                                        )}
+                                    />
+                                    <div>
+                                        <Button type="submit" className="w-full h-12">Submit</Button>
+                                        <Button variant="outline" className="w-full mt-2 h-12"> Login With Google</Button>
+                                    </div>
+                                </form>
+                            </Form>
                         </TabsContent>
                     </div>
                 </Tabs>
