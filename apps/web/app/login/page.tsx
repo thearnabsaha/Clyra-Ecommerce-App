@@ -6,6 +6,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@workspace/ui/componen
 import { CustomerSignInSchema, CustomerSignUpSchema } from '@workspace/utils/types';
 import { Button } from "@workspace/ui/components/button"
 import axios from 'axios';
+import { useRouter } from 'next/navigation';
 import {
     Form,
     FormControl,
@@ -17,6 +18,7 @@ import {
 import { Input } from "@workspace/ui/components/input"
 import { BACKEND_URL } from "@/lib/config"
 const page = () => {
+    const router = useRouter()
     const SignUpform = useForm<FieldValues>({
         resolver: zodResolver(CustomerSignUpSchema),
         defaultValues: {
@@ -38,6 +40,7 @@ const page = () => {
         axios.post(`${BACKEND_URL}/customer/signup`, values)
             .then(function (response) {
                 // console.log(response);
+                router.push('/dashboard')
             })
             .catch(function (error) {
                 console.log(error);
@@ -48,6 +51,7 @@ const page = () => {
         // console.log(values)
         axios.post(`${BACKEND_URL}/customer/signin`, values)
             .then(function (response) {
+                router.push('/dashboard')
                 // console.log(response);
             })
             .catch(function (error) {
